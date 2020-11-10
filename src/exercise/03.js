@@ -5,6 +5,15 @@ import * as React from 'react'
 
 const CountContext = React.createContext()
 
+const useCount = () => {
+  const countContext = React.useContext(CountContext)
+  
+  if (!countContext) {
+    throw new Error('This hook can only be used within CountContext component')
+  }
+  return countContext
+}
+
 const CountProvider = (props) => {
   const value = React.useState(0)
 
@@ -12,7 +21,7 @@ const CountProvider = (props) => {
 }
 
 function CountDisplay() {
-  const [ count ] = React.useContext(CountContext)
+  const [ count ] = useCount()
 
   return <div>{`The current count is ${count}`}</div>
 }
@@ -30,6 +39,7 @@ function App() {
         <CountDisplay />
         <Counter />
       </CountProvider>
+      {/*<CountDisplay /> <--- this throws an error if uncommented*/}
     </div>
   )
 }
